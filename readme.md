@@ -13,8 +13,8 @@ A simple discord bot that uses the google text-to-speech API to read messages in
 1- Clone the repository
 
 ```bash
-git clone https://github.com/kirellkekw/ttsbot.git
-cd ttsbot # assuming you cloned it into the current directory
+git clone https://github.com/kirellkekw/discord-tts.git
+cd discord-tts # assuming you cloned it into the current directory
 ```
 
 2- Install the requirements
