@@ -1,0 +1,6 @@
+.env
+ttsbot-creds.json
+.vscode
+mountpoint
+tmp
+__pycache__
