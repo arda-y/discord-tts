@@ -7,6 +7,7 @@ from google_tts import GoogleTTS
 from nextcord import VoiceProtocol, Message, FFmpegPCMAudio
 from nextcord.ext import commands, tasks
 from nextcord.ext.commands import Bot
+from nextcord.errors import ClientException
 
 from audio_source import BytesAudioSource
 from db_connector import Server, User, QuotaTracker
@@ -25,7 +26,7 @@ class TextToSpeech(commands.Cog):
             for client in self.bot.voice_clients:
                 if (datetime.now() - client.last_activity).seconds > 180:
                     await client.disconnect()
-        except AttributeError: # no worries, keep working
+        except AttributeError:  # no worries, keep working
             pass
         except Exception as e:
             print(e)
@@ -166,15 +167,13 @@ class TextToSpeech(commands.Cog):
             len(msg.content)
         )  # add to quota if voice is generated
 
-        voice_clients: List[VoiceProtocol] = self.bot.voice_clients
-        if voice_clients == []:  # no voice clients
+        if self.bot.voice_clients == []:  # no voice clients
             client = await user_voice_channel.connect()
             client.play(FFmpegPCMAudio(source=audio.get_path()))
             client.last_activity = datetime.now()
 
         else:
-
-            for client in voice_clients:
+            for client in self.bot.voice_clients:
                 # every single connection is for one guild only
                 # check if in guild's voice channel
                 # if not then connect, otherwise check for channel match
@@ -183,11 +182,28 @@ class TextToSpeech(commands.Cog):
                 ):  # bot is connected to guild's voice channel
                     if client.channel.id == user_voice_channel.id:
                         # bot is connected to the same channel as user
-
-                        if client.is_playing():
-                            continue
-                        client.play(FFmpegPCMAudio(source=audio.get_path()))
-                        client.last_activity = datetime.now()
+                        try:
+                            client.play(FFmpegPCMAudio(source=audio.get_path()))
+                            client.last_activity = datetime.now()
+                        except ClientException as e:
+                            if "Not connected to voice." in str(e):
+                                await msg.reply(
+                                    "Encountered internal error(Not connected to voice), attempting to reconnect for auto repair. Try disconnecting and reconnecting the bot manually if this persists."
+                                    + f"\n\nError log: ```\n{e[:700]}```"  # discord character limit is 2000, 1700 is a safe bet
+                                )
+                                try:
+                                    await client.disconnect()
+                                    client = await user_voice_channel.connect()
+                                except Exception as e:
+                                    await msg.reply("Failed to reconnect, ")
+                            elif "Already playing audio." in str(e):
+                                # no queue system yet, and probably not in the future, safe to ignore
+                                pass
+                            else:
+                                await msg.reply(
+                                    "Encountered internal error that's not explicitly handled, please report this to the developer."
+                                    + f"Error log: {e[:1700]}"  # discord character limit is 2000, 1700 is a safe bet
+                                )
                     break
 
 
