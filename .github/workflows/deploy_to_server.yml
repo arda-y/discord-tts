@@ -27,4 +27,4 @@ jobs:
         run: ls -l
 
       - name: Run New Image
-        run: docker compose up -d
+        run: docker compose up --build -d
