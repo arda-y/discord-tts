@@ -31,7 +31,7 @@ cd discord-tts # assuming you cloned it into the current directory
 - Enable all intents in the "Bot" tab(it's probably not all of them, not going to verify that)
 - in Bot scope, enable "Read Messages", "Connect" and "Speak" permissions
 - Generate an OAuth2 URL and invite the bot to your server
-- Create a new file called `discord-token.txt` in the root directory of the project and paste the token into itü
+- Create a new file called `discord-token.txt` in the root directory of the project and paste the token into it
 
 4- Get a Google Cloud API key
 
