@@ -1,6 +1,8 @@
-.gitignore
+__pycache__
+.github
 .vscode
-readme.md
 tmp
-Dockerfile
+.gitignore
 docker-compose.yml
+Dockerfile
+readme.md
