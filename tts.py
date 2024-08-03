@@ -102,7 +102,7 @@ class TextToSpeech(commands.Cog):
 
         audio_gen_lang_code = ""
         audio_gen_voice = ""
-        audio_gen_speed = None
+        audio_gen_speed = ""
 
 
         # 1- check server specific voice/lang
