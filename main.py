@@ -52,6 +52,17 @@ async def check_quota(ctx: Context):
 
 
 @bot.command()
+async def build_hash(ctx: Context):
+    if not ctx.author.id == bot.owner_id:
+        await ctx.reply("You do not have permission to use this command")
+        return
+
+    hash = os.getenv("BUILD_HASH")
+
+    await ctx.reply(f"Build hash: {hash}")
+
+
+@bot.command()
 async def help(ctx: Context):
     embed = Embed(title="Text To Speech Bot", color=0x00FF00)
     embed.description = (

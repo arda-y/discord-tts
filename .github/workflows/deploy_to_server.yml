@@ -9,13 +9,16 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Stop Old Container
-        run: docker stop discord-tts || true
+        run: docker compose down || true
 
       - name: Remove Old Container
         run: docker rm discord-tts || true
 
       - name: Copy Required Files
         run: cp -r /home/beypazari/tts-files/* /actions-runner/discord-tts/_work/discord-tts/discord-tts/
+
+      - name: Add Current Build Hash to Dockerfile
+        run: echo "ARG BUILD_HASH=$(git rev-parse --short HEAD)" >> Dockerfile
 
       - name: Print Current Directory(debug)
         run: pwd
