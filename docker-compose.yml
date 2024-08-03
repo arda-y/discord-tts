@@ -7,8 +7,8 @@ services:
     volumes:
       - /app/discord-tts/:/app/mountpoint/
     environment:
-      DISCORD_TOKEN_FILE: /app/mountpoint/discord-token.txt
-      GOOGLE_API_KEY_FILE: /app/mountpoint/google-api-key.json
+      DISCORD_TOKEN_FILE: /run/secrets/discord-token
+      GOOGLE_API_KEY_FILE: /run/secrets/google-api-key
     secrets:
       - discord-token
       - google-api-key
