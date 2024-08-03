@@ -6,7 +6,7 @@ import os
 from db_connector import Server, User, QuotaTracker
 from voice_list import *
 from config import *
-
+import json
 
 with open(os.getenv("DISCORD_TOKEN_FILE"), "r") as f:
     TOKEN = f.read()
@@ -63,7 +63,7 @@ async def build_hash(ctx: Context):
     except FileNotFoundError:
         hash = "NaN"
 
-    await ctx.reply(f"Build hash: {hash}")
+    await ctx.reply(f"Build Hash: `{hash}`")
 
 
 @bot.command()
@@ -92,12 +92,12 @@ async def dry_run(ctx: Context):
     server = await Server.get_or_generate(ctx.guild.id)
 
     try:
-        user_server_speed = user.servers[str(ctx.guild.id)]["speed"]
+        user_server_speed = json.loads(user.servers)[str(ctx.guild.id)]["speed"]
     except KeyError:
         user_server_speed = None
 
     try:
-        user_server_voice = user.servers[str(ctx.guild.id)]["voice"]
+        user_server_voice = json.loads(user.servers)[str(ctx.guild.id)]["voice"]
     except KeyError:
         user_server_voice = None
 
