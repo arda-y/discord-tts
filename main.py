@@ -77,12 +77,12 @@ async def dry_run(ctx: Context):
     server = await Server.get_or_generate(ctx.guild.id)
 
     try:
-        user_server_speed = user.servers[ctx.guild.id]["speed"]
+        user_server_speed = user.servers[str(ctx.guild.id)]["speed"]
     except KeyError:
         user_server_speed = None
 
     try:
-        user_server_voice = user.servers[ctx.guild.id]["voice"]
+        user_server_voice = user.servers[str(ctx.guild.id)]["voice"]
     except KeyError:
         user_server_voice = None
 
