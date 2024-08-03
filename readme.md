@@ -5,7 +5,7 @@ A simple discord bot that uses the google text-to-speech API to read messages in
 ## Installation
 
 <div>
-<img src="https://cdn.discordapp.com/attachments/1170481425716355075/1266746276796698676/68747470733a2f2f6a6f68616e2e647269657373656e2e73652f696d616765732f6a6f68616e5f647269657373656e5f73652f57696e646f77734c6976655772697465722f50657273697374616e6365696e57463462657461325f453441442f776f726b732d6f6e2d6d.png?ex=66a644e7&is=66a4f367&hm=d951ad7f1eb4973fab67154145df4c3a8688d09bdef555775ab3d9db43381446&" align: center; />
+<img src="https://blog.codinghorror.com/content/images/uploads/2007/03/6a0120a85dcdae970b0128776ff992970c-pi.png" align: center; />
 </div>
 
 (works on my machine, so you get instructions for my machine, go figure)
