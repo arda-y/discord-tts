@@ -72,8 +72,8 @@ async def help(ctx: Context):
 
 
 @bot.command()
-async def dry_run(ctx: Context, *, member: Member):
-    user = await User.get_or_generate(member.id)
+async def dry_run(ctx: Context):
+    user = await User.get_or_generate(ctx.author.id)
     server = await Server.get_or_generate(ctx.guild.id)
 
     try:
