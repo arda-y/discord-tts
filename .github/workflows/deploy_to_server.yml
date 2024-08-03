@@ -14,5 +14,8 @@ jobs:
       - name: Remove Old Container
         run: docker rm discord-tts || true
 
+      - name: Copy Required Files
+        run: cp -r /home/beypazari/tts-files ./
+
       - name: Run New Image
         run: docker compose up -d
