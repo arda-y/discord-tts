@@ -100,6 +100,11 @@ class TextToSpeech(commands.Cog):
         user_db_data: User = await User.get_or_generate(user.id)
         server_db_data: Server = await Server.get_or_generate(msg.guild.id)
 
+        audio_gen_lang_code = ""
+        audio_gen_voice = ""
+        audio_gen_speed = None
+
+
         # 1- check server specific voice/lang
         # 2- check server default voice/lang
         # 3- check user default voice/lang
