@@ -17,5 +17,11 @@ jobs:
       - name: Copy Required Files
         run: cp -r /home/beypazari/tts-files /actions-runner/discord-tts/_work/discord-tts/discord-tts/
 
+      - name: Print Current Directory(debug)
+        run: pwd
+
+      - name: Print Files in Current Directory(debug)
+        run: ls -l
+
       - name: Run New Image
         run: docker compose up -d
