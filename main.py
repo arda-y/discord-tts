@@ -1,5 +1,5 @@
 from nextcord.ext.commands import Bot
-from nextcord import Intents, Embed
+from nextcord import Intents, Embed, Member
 from nextcord.ext.commands import Context
 from tts import TextToSpeech
 import os
@@ -58,6 +58,7 @@ async def help(ctx: Context):
         "Prefix: `tts!`\n"
         + "All commands:\n\n"
         + "`tts!help` - Shows this message\n"
+        + "`tts!dry_run` - Dry runs the voice generation, shows values\n"
         + "`tts!ping` - Tests if the bot is online and responsive\n\n"
         + "`tts!get languages` - Shows the supported language codes\n"
         + "`tts!get voices <language_code>` - Shows the supported voices for a language\n\n"
@@ -68,6 +69,47 @@ async def help(ctx: Context):
         + "`tts!set default speed <speed>` - Sets the default speed for the user, lowest priority when generating audio"
     )
     await ctx.reply(embed=embed)
+
+
+@bot.command()
+async def dry_run(ctx: Context, *, member: Member):
+    user = await User.get_or_generate(member.id)
+    server = await Server.get_or_generate(ctx.guild.id)
+
+    try:
+        user_server_speed = user.servers[ctx.guild.id]["speed"]
+    except KeyError:
+        user_server_speed = None
+
+    try:
+        user_server_voice = user.servers[ctx.guild.id]["voice"]
+    except KeyError:
+        user_server_voice = None
+
+    try:
+        user_default_speed = user.default_speed
+    except KeyError:
+        user_default_speed = None
+
+    try:
+        user_default_voice = user.default_voice
+    except KeyError:
+        user_default_voice = None
+
+    try:
+        server_voice = server.voice
+    except KeyError:
+        server_voice = None
+
+    msg = (
+        f"User Server Voice: `{user_server_voice}`\n"
+        + f"Server Voice: `{server_voice}`\n"
+        + f"User Default Voice: `{user_default_voice}`\n\n"
+        + f"User Server Speed: `{user_server_speed}`\n"
+        + f"User Default Speed: `{user_default_speed}`"
+    )
+
+    await ctx.reply(msg)
 
 
 @bot.group()
