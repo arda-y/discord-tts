@@ -104,7 +104,6 @@ class TextToSpeech(commands.Cog):
         audio_gen_voice = ""
         audio_gen_speed = ""
 
-
         # 1- check server specific voice/lang
         # 2- check server default voice/lang
         # 3- check user default voice/lang
@@ -138,9 +137,14 @@ class TextToSpeech(commands.Cog):
 
         # 4- check server specific speed
         try:
+            server_specific_settings = json.loads(user_db_data.servers)[
+                str(msg.guild.id)
+            ]
             audio_gen_speed = server_specific_settings["speed"]
         except KeyError:
             pass
+        except Exception as e:
+            print(e)
 
         # 5- check user default speed
         if len(audio_gen_speed) == 0:
