@@ -57,7 +57,11 @@ async def build_hash(ctx: Context):
         await ctx.reply("You do not have permission to use this command")
         return
 
-    hash = os.getenv("BUILD_HASH")
+    try:
+        with open("build_hash.txt", "r") as f:
+            hash = f.read()
+    except FileNotFoundError:
+        hash = "NaN"
 
     await ctx.reply(f"Build hash: {hash}")
 

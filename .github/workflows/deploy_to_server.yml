@@ -17,8 +17,8 @@ jobs:
       - name: Copy Required Files
         run: cp -r /home/beypazari/tts-files/* /actions-runner/discord-tts/_work/discord-tts/discord-tts/
 
-      - name: Add Current Build Hash to Dockerfile
-        run: echo "ARG BUILD_HASH=$(git rev-parse --short HEAD)" >> Dockerfile
+      - name: Save Current Build Hash
+        run: echo "ARG BUILD_HASH=$(git rev-parse --short HEAD)" >> build_hash.txt
 
       - name: Print Current Directory(debug)
         run: pwd
