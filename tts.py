@@ -39,8 +39,8 @@ class TextToSpeech(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, msg: Message):
         # parse user and channel id
-        user = msg.author
-        user_id = user.id
+        user: User = msg.author
+
         user_voice_channel = user.voice.channel if user.voice else None
 
         if msg.author.bot:
@@ -97,58 +97,53 @@ class TextToSpeech(commands.Cog):
         if not 300 > len(msg.content.strip()) > 0:
             return
 
-        user_db_data: User = await User.get_or_generate(user_id)
+        user_db_data: User = await User.get_or_generate(user.id)
         server_db_data: Server = await Server.get_or_generate(msg.guild.id)
 
-        audio_gen_lang_code = ""
-        audio_gen_voice = ""
-        audio_gen_speed = ""
+        # 1- check server specific voice/lang
+        # 2- check server default voice/lang
+        # 3- check user default voice/lang
+        # 4- check server specific speed
+        # 5- check user default speed
 
+        # 1- check server specific voice/lang
         try:
             server_specific_settings = json.loads(user_db_data.servers)[
                 str(msg.guild.id)
             ]
-        except KeyError:
-            server_specific_settings = None
-        except TypeError:
-            server_specific_settings = None
-
-        # check if user has server specific settings
-        try:
             audio_gen_lang_code = server_specific_settings["lang"]
             audio_gen_voice = server_specific_settings["voice"]
         except KeyError:
             pass
-        except TypeError:
-            pass
+        except Exception as e:
+            print(e)
 
-        # otherwise check if server has settings
-        if server_db_data.lang != None and server_db_data.voice != None:
+        # 2- check server default voice/lang
+        if len(audio_gen_lang_code) == 0 or len(audio_gen_voice) == 0:
             try:
                 audio_gen_lang_code = server_db_data.lang
                 audio_gen_voice = server_db_data.voice
             except Exception as e:
-                pass
+                print(e)
 
-        # fallback to user default settings
-        if audio_gen_lang_code in ["", None] or audio_gen_voice in ["", None]:
+        # 3- check user default voice/lang
+        if len(audio_gen_lang_code) == 0 or len(audio_gen_voice) == 0:
             audio_gen_lang_code = user_db_data.default_lang
             audio_gen_voice = user_db_data.default_voice
 
-        # check if user has server specific settings
-        if server_specific_settings != None:
-            try:
-                audio_gen_speed = server_specific_settings["speed"]
-            except KeyError:
-                pass
+        # 4- check server specific speed
+        try:
+            audio_gen_speed = server_specific_settings["speed"]
+        except KeyError:
+            pass
 
-        # fallback to user default settings
-        if audio_gen_speed == "":
+        # 5- check user default speed
+        if len(audio_gen_speed) == 0:
             audio_gen_speed = user_db_data.default_speed
 
         # debug point
         print(
-            f"User: {user_id}"
+            f"User: {user.id}"
             f"\nServer: {msg.guild.id}"
             f"\nText: {msg.content}"  # lenght of msg.content is gonna be added to character limit
             f"\nLanguage: {audio_gen_lang_code}"
