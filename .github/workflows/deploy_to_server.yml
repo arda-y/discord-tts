@@ -15,7 +15,7 @@ jobs:
         run: docker rm discord-tts || true
 
       - name: Copy Required Files
-        run: cp -r /home/beypazari/tts-files ./
+        run: cp -r /home/beypazari/tts-files /actions-runner/discord-tts/_work/discord-tts/discord-tts/
 
       - name: Run New Image
         run: docker compose up -d
