@@ -19,11 +19,8 @@ cd discord-tts # assuming you cloned it into the current directory
 
 2- Install the requirements
 
-- Have python 3.11+ and FFmpeg installed before going any further
-
-```bash
-pip install -r requirements.txt
-```
+- docker
+- ffmpeg
 
 3- Create a Discord bot and get the token
 
@@ -50,15 +47,17 @@ pip install -r requirements.txt
 
 - Before running the bot, change the values in `config.py`, such as the prefix and owner id.
 
+- Run the bot
+
 ```bash
-python main.py
+docker compose up -d
 ```
 
 bon appétit, run `!tts help` in a text channel to get a list of commands
 
 ## License
 
-Glorbo Florbo personally emailed me this project while I was drinking beypazarı mineral water on an unusually
+Glorbo Florbo personally emailed me this project while I was drinking Beypazarı(TM) mineral water on an unusually
 hot wednesday at 2.49pm. So, feel free to use it however you like, but don't tell Glorbo Florbo
 about it.
 
