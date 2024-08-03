@@ -1,0 +1,23 @@
+# all values can be changed to your liking, provided you know what you are doing
+version: '3'
+
+services:
+  discord-tts:
+    image: discord-tts:latest
+    container_name: discord-tts
+    restart: always
+    volumes:
+      - /app/discord-tts/:/app/mountpoint/
+    environment:
+      DISCORD_TOKEN_FILE: /app/mountpoint/discord-token.txt
+      GOOGLE_API_KEY_FILE: /app/mountpoint/google-api-key.json
+    secrets:
+      - discord-token
+      - google-api-key
+
+
+secrets:
+  discord-token:
+    file: ./discord-token.txt
+  google-api-key:
+    file: ./google-api-key.json

@@ -7,7 +7,7 @@ class GoogleTTS:
 
     def __init__(self):
         # adds credentials to environment
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "ttsbot-creds.json"
+        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv("GOOGLE_API_KEY_FILE")
 
         # creates a client from the credentials pulled from the environment
         self.ttsclient = texttospeech.TextToSpeechClient()

@@ -4,7 +4,7 @@ from datetime import datetime
 
 import json
 from google_tts import GoogleTTS
-from nextcord import VoiceProtocol, Message, FFmpegPCMAudio
+from nextcord import Message, FFmpegPCMAudio
 from nextcord.ext import commands, tasks
 from nextcord.ext.commands import Bot
 from nextcord.errors import ClientException

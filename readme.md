@@ -19,7 +19,7 @@ cd discord-tts # assuming you cloned it into the current directory
 
 2- Install the requirements
 
-- Have python 3.11+ installed before going any further
+- Have python 3.11+ and FFmpeg installed before going any further
 
 ```bash
 pip install -r requirements.txt
@@ -34,17 +34,7 @@ pip install -r requirements.txt
 - Enable all intents in the "Bot" tab(it's probably not all of them, not going to verify that)
 - in Bot scope, enable "Read Messages", "Connect" and "Speak" permissions
 - Generate an OAuth2 URL and invite the bot to your server
-- Create an .env file in current directory
-
-```bash
-touch .env
-```
-
-- Add the following line to the .env file(using vim or whatever text editor you like, i won't judge you)
-
-```bash
-DISCORD_BOT_TOKEN="your_token_here"
-```
+- Paste the token into the `discord-token.txt` file in the root directory of the project
 
 4- Get a Google Cloud API key
 
@@ -53,10 +43,12 @@ DISCORD_BOT_TOKEN="your_token_here"
 - Enable the "Text-to-Speech API", probably in [this link](https://console.cloud.google.com/apis/api/texttospeech.googleapis.com)(not going to verify that either)
 - Create a service account
 - Download the JSON key file
-- Rename the JSON key file to `ttsbot-creds.json`
-- Move the JSON key file to the root directory of the project(or current directory, if you cloned the repo into the current directory)
+- Rename the JSON key file to `google-api-key.json`
+- Move the JSON key file to the root directory of the project
 
 5- Run the bot
+
+- Before running the bot, change the values in `config.py`, such as the prefix and owner id.
 
 ```bash
 python main.py

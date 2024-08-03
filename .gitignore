@@ -1,6 +1,6 @@
-.env
-ttsbot-creds.json
-.vscode
-mountpoint
-tmp
 __pycache__
+.vscode
+tmp
+test*
+google-api-key.json
+mountpoint

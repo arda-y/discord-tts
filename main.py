@@ -1,18 +1,26 @@
 from nextcord.ext.commands import Bot
 from nextcord import Intents, Embed
 from nextcord.ext.commands import Context
-import os
 from tts import TextToSpeech
+import os
 from db_connector import Server, User, QuotaTracker
 from voice_list import *
+from config import *
 
-BOT_PREFIX = "tts!"
-TOKEN = os.getenv("DISCORD_BOT_TOKEN")
+
+with open(os.getenv("DISCORD_TOKEN_FILE"), "r") as f:
+    TOKEN = f.read()
+
+
+if bot_owner_id == 5:
+    bot_owner_id = os.getenv(
+        "OWNER_ID", 343517933256835072
+    )  # check env, or fallback to developer id
 
 bot = Bot(
-    command_prefix=BOT_PREFIX,
+    command_prefix=bot_prefix,
     intents=Intents.all(),
-    owner_id=343517933256835072,
+    owner_id=bot_owner_id,
     help_command=None,
 )
 
