@@ -1,9 +1,7 @@
 # all values can be changed to your liking, provided you know what you are doing
-version: '3'
-
 services:
   discord-tts:
-    image: discord-tts:latest
+    build: .
     container_name: discord-tts
     restart: always
     volumes:

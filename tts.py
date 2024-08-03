@@ -189,7 +189,7 @@ class TextToSpeech(commands.Cog):
                             if "Not connected to voice." in str(e):
                                 await msg.reply(
                                     "Encountered internal error(Not connected to voice), attempting to reconnect for auto repair. Try disconnecting and reconnecting the bot manually if this persists."
-                                    + f"\n\nError log: ```\n{e[:700]}```"  # discord character limit is 2000, 1700 is a safe bet
+                                    + f"\n\nError log: ```\n{str(e)[:1700]}```"  # discord character limit is 2000, 1700 is a safe bet
                                 )
                                 try:
                                     await client.disconnect()
@@ -202,7 +202,7 @@ class TextToSpeech(commands.Cog):
                             else:
                                 await msg.reply(
                                     "Encountered internal error that's not explicitly handled, please report this to the developer."
-                                    + f"Error log: {e[:1700]}"  # discord character limit is 2000, 1700 is a safe bet
+                                    + f"Error log: {str(e)[:1700]}"  # discord character limit is 2000, 1700 is a safe bet
                                 )
                     break
 

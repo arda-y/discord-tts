@@ -2,6 +2,7 @@ from sqlalchemy import create_engine, inspect, Column, String, BigInteger, JSON
 from sqlalchemy.orm import declarative_base, Session
 import json
 
+# i'll add option to switch to postgresql later
 _db_string = "sqlite:///mountpoint/discord-ttsbot.db"
 
 if _db_string is None:

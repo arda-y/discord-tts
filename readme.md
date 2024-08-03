@@ -34,7 +34,7 @@ pip install -r requirements.txt
 - Enable all intents in the "Bot" tab(it's probably not all of them, not going to verify that)
 - in Bot scope, enable "Read Messages", "Connect" and "Speak" permissions
 - Generate an OAuth2 URL and invite the bot to your server
-- Paste the token into the `discord-token.txt` file in the root directory of the project
+- Create a new file called `discord-token.txt` in the root directory of the project and paste the token into itü
 
 4- Get a Google Cloud API key
 
