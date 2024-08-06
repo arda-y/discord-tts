@@ -48,7 +48,22 @@ async def check_quota(ctx: Context):
 
     used_characters: int = await QuotaTracker.get_quota_usage()
 
-    await msg.edit(content=f"Characters used: {used_characters}")
+    await msg.edit(content=f"Characters used: `{used_characters}`")
+
+
+@bot.command()
+async def set_quota(ctx: Context, quota: int):
+
+    if not ctx.author.id == bot.owner_id:
+        await ctx.reply("You do not have permission to use this command")
+        return
+
+    operation = await QuotaTracker.modify_quota(quota)
+
+    if operation:
+        await ctx.reply(f"Quota set to `{quota}`")
+    else:
+        await ctx.reply("Failed to set quota")
 
 
 @bot.command()
@@ -73,6 +88,9 @@ async def help(ctx: Context):
         "Prefix: `tts!`\n"
         + "All commands:\n\n"
         + "`tts!help` - Shows this message\n"
+        + "`tts!build_hash` - Shows the build hash of the bot\n"
+        + "`tts!check_quota` - Checks the quota usage\n" if ctx.author.id == bot.owner_id else ""
+        + "`tts!set_quota <quota>` - Sets the quota\n" if ctx.author.id == bot.owner_id else ""
         + "`tts!dry_run` - Dry runs the voice generation, shows values\n"
         + "`tts!ping` - Tests if the bot is online and responsive\n\n"
         + "`tts!get languages` - Shows the supported language codes\n"
