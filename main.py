@@ -89,8 +89,8 @@ async def help(ctx: Context):
         + "All commands:\n\n"
         + "`tts!help` - Shows this message\n"
         + "`tts!build_hash` - Shows the build hash of the bot\n"
-        + "`tts!check_quota` - Checks the quota usage\n" if ctx.author.id == bot.owner_id else ""
-        + "`tts!set_quota <quota>` - Sets the quota\n" if ctx.author.id == bot.owner_id else ""
+        + ("`tts!check_quota` - Checks the quota usage\n" if ctx.author.id == bot.owner_id else "")
+        + ("`tts!set_quota <quota>` - Sets the quota\n" if ctx.author.id == bot.owner_id else "")
         + "`tts!dry_run` - Dry runs the voice generation, shows values\n"
         + "`tts!ping` - Tests if the bot is online and responsive\n\n"
         + "`tts!get languages` - Shows the supported language codes\n"
