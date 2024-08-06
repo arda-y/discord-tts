@@ -147,7 +147,7 @@ class TextToSpeech(commands.Cog):
             print(e)
 
         # 5- check user default speed
-        if len(audio_gen_speed) == 0:
+        if type(audio_gen_speed) == str:  # means it's still empty
             audio_gen_speed = user_db_data.default_speed
 
         # debug point
