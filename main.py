@@ -83,14 +83,22 @@ async def build_hash(ctx: Context):
 
 @bot.command()
 async def help(ctx: Context):
-    embed = Embed(title="Text To Speech Bot", color=0x00FF00)
+    embed = Embed(title="BORN TO SPEAK, FORCED TO TYPE", color=0x00FF00)
     embed.description = (
         "Prefix: `tts!`\n"
         + "All commands:\n\n"
         + "`tts!help` - Shows this message\n"
         + "`tts!build_hash` - Shows the build hash of the bot\n"
-        + ("`tts!check_quota` - Checks the quota usage\n" if ctx.author.id == bot.owner_id else "")
-        + ("`tts!set_quota <quota>` - Sets the quota\n" if ctx.author.id == bot.owner_id else "")
+        + (
+            "`tts!check_quota` - Checks the quota usage\n"
+            if ctx.author.id == bot.owner_id
+            else ""
+        )
+        + (
+            "`tts!set_quota <quota>` - Sets the quota\n"
+            if ctx.author.id == bot.owner_id
+            else ""
+        )
         + "`tts!dry_run` - Dry runs the voice generation, shows values\n"
         + "`tts!ping` - Tests if the bot is online and responsive\n\n"
         + "`tts!get languages` - Shows the supported language codes\n"
@@ -105,11 +113,11 @@ async def help(ctx: Context):
 
 
 @bot.command()
-async def dry_run(ctx: Context, *, user: Member = None):
+async def dry_run(ctx: Context, *, user: Member | User = None):
 
     if user is None:
         user = ctx.author
-        
+
     user = await User.get_or_generate(ctx.author.id)
     server = await Server.get_or_generate(ctx.guild.id)
 
