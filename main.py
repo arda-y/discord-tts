@@ -38,17 +38,33 @@ async def ping(ctx: Context):
 
 # admin only command
 @bot.command()
-async def check_quota(ctx: Context):
-
-    if not ctx.author.id == bot.owner_id:
-        await ctx.reply("You do not have permission to use this command")
-        return
+async def check_quota(ctx: Context, *, displayedMember: Member | User = None):
 
     msg = await ctx.reply("Checking quota")
 
     used_characters: int = await QuotaTracker.get_quota_usage()
 
-    await msg.edit(content=f"Characters used: `{used_characters}`")
+    if displayedMember is None:
+        displayedMember = ctx.author
+
+    if displayedMember.bot: # ignore bots
+        await msg.edit(content="Bot users do not have tracked usage.")
+        return
+    
+    new_msg = ""
+
+    try:
+        user = await User.get_or_generate(displayedMember.id)
+        user_quota = user.characters_used
+        new_msg += f"Characters used by {displayedMember.display_name}: `{user_quota}`\n"
+    except KeyError:
+        new_msg += f"Characters used by {displayedMember.display_name} were unable to be retrieved\n"
+        
+    await msg.edit(content=f"Cumulative characters used: `{used_characters}`")
+
+    await msg.edit(content=new_msg)
+
+
 
 
 @bot.command()

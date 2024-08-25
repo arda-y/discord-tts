@@ -171,6 +171,9 @@ class TextToSpeech(commands.Cog):
             len(msg.content)
         )  # add to quota if voice is generated
 
+        await User.add_characters_used(user.id, len(msg.content)) 
+        # add to user's character count
+
         if self.bot.voice_clients == []:  # no voice clients
             client = await user_voice_channel.connect()
             client.play(FFmpegPCMAudio(source=audio.get_path()))

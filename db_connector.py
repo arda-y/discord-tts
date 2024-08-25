@@ -155,6 +155,7 @@ class User(Base):
     default_lang = Column(String, default="en-US")
     default_voice = Column(String, default="en-US-Wavenet-A")
     default_speed = Column(String, default="1.0")
+    characters_used = Column(BigInteger, default=0)
 
     servers = Column(JSON, default={})
     # per server voice and speed dictionary
@@ -243,6 +244,21 @@ class User(Base):
             conn = create_session()
             return False
 
+    @staticmethod
+    async def add_characters_used(user_id: int, characters_used: int):
+        global conn
+        try:
+            user = conn.query(User).filter_by(id=user_id).first()
+            if user is None:
+                return False
+            user.characters_used += characters_used
+            conn.commit()
+            return True
+        except Exception as e:
+            print(e)
+            # reset the connection if an error occurs
+            conn = create_session()
+            return False
 
 # This line has to come after the tables are defined
 Base.metadata.create_all(_engine, checkfirst=True)
