@@ -1,5 +1,4 @@
 import re
-from typing import List
 from datetime import datetime
 
 import json
@@ -115,7 +114,6 @@ class TextToSpeech(commands.Cog):
             server_specific_settings = json.loads(user_db_data.servers)[
                 str(msg.guild.id)
             ]
-
             if server_specific_settings["lang"] == None:
                 raise KeyError
             if server_specific_settings["voice"] == None:
@@ -130,8 +128,14 @@ class TextToSpeech(commands.Cog):
         # 2- check server default voice/lang
         if len(audio_gen_lang_code) == 0 or len(audio_gen_voice) == 0:
             try:
+                if server_db_data.lang == None:
+                    raise KeyError
+                if server_db_data.voice == None:
+                    raise KeyError
                 audio_gen_lang_code = server_db_data.lang
                 audio_gen_voice = server_db_data.voice
+            except KeyError:
+                pass
             except Exception as e:
                 print(e)
 
@@ -145,14 +149,15 @@ class TextToSpeech(commands.Cog):
             server_specific_settings = json.loads(user_db_data.servers)[
                 str(msg.guild.id)
             ]
-            audio_gen_speed = server_specific_settings["speed"]
+            if server_specific_settings["speed"] == None:
+                raise KeyError
         except KeyError:
             pass
         except Exception as e:
             print(e)
 
         # 5- check user default speed
-        if type(audio_gen_speed) == str:  # means it's still empty
+        if len(audio_gen_speed) == 0:
             audio_gen_speed = user_db_data.default_speed
 
         # debug point
@@ -172,11 +177,12 @@ class TextToSpeech(commands.Cog):
             speed=float(audio_gen_speed),
         )  # generate audio from text
 
-        await QuotaTracker.add_to_quota(
+
+        a = await QuotaTracker.add_to_quota(
             len(msg.content)
         )  # add to quota if voice is generated
 
-        await User.add_characters_used(user.id, len(msg.content)) 
+        await User.add_characters_used(user.id, len(msg.content))
         # add to user's character count
 
         if self.bot.voice_clients == []:  # no voice clients
