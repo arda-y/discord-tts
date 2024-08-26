@@ -217,10 +217,7 @@ class User(Base):
             if default_speed is not None:
                 user.default_speed = default_speed
             if server_id is not None:
-                # we have to do json deserialization here
                 deserialized_servers = json.loads(str(user.servers))
-                print(deserialized_servers)
-                print(user.servers)
 
                 try:
                     _ = deserialized_servers[str(server_id)]
