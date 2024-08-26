@@ -115,6 +115,11 @@ class TextToSpeech(commands.Cog):
             server_specific_settings = json.loads(user_db_data.servers)[
                 str(msg.guild.id)
             ]
+
+            if server_specific_settings["lang"] == None:
+                raise KeyError
+            if server_specific_settings["voice"] == None:
+                raise KeyError
             audio_gen_lang_code = server_specific_settings["lang"]
             audio_gen_voice = server_specific_settings["voice"]
         except KeyError:
