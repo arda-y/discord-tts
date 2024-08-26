@@ -47,24 +47,22 @@ async def check_quota(ctx: Context, *, displayedMember: Member | User = None):
     if displayedMember is None:
         displayedMember = ctx.author
 
-    if displayedMember.bot: # ignore bots
+    if displayedMember.bot:  # ignore bots
         await msg.edit(content="Bot users do not have tracked usage.")
         return
-    
+
     new_msg = ""
 
     try:
         user = await User.get_or_generate(displayedMember.id)
         user_quota = user.characters_used
-        new_msg += f"Characters used by {displayedMember.display_name}: `{user_quota}`\n"
+        new_msg += f"Characters used by {displayedMember.mention}: `{user_quota}`\n"
     except KeyError:
-        new_msg += f"Characters used by {displayedMember.display_name} were unable to be retrieved\n"
-        
-    await msg.edit(content=f"Cumulative characters used: `{used_characters}`")
+        new_msg += f"Characters used by {displayedMember.mention} were unable to be retrieved\n"
+
+    new_msg += f"Cumulative characters used: `{used_characters}`"
 
     await msg.edit(content=new_msg)
-
-
 
 
 @bot.command()
