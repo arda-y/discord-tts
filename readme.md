@@ -70,7 +70,8 @@ about it.
 
 ### dev notes
 
-- will add docker support at some point
-- keyword being "at some point", don't hold your breath
-- code is highly borked, don't look at it
+- will add docker support at some point(added it)
+- keyword being "at some point", don't hold your breath(again, added it)
+- code is highly borked, don't look at it(it's slightly less borked now)
 - bot it theoretically harmless except for the fact that it can read your messages out very slowly, which is a form of torture
+ 
