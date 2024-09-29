@@ -1,4 +1,5 @@
 import re
+import sys
 from datetime import datetime
 
 import json
@@ -16,6 +17,7 @@ class TextToSpeech(commands.Cog):
     def __init__(self, bot: Bot):
         self.bot = bot
         self.google_tts = GoogleTTS()
+        self.permission_to_restart = False
 
     @tasks.loop(seconds=5)
     async def check_voice_clients(self):
@@ -39,7 +41,6 @@ class TextToSpeech(commands.Cog):
     async def on_message(self, msg: Message):
         # parse user and channel id
         user: User = msg.author
-
         user_voice_channel = user.voice.channel if user.voice else None
 
         if msg.author.bot:
@@ -177,8 +178,7 @@ class TextToSpeech(commands.Cog):
             speed=float(audio_gen_speed),
         )  # generate audio from text
 
-
-        a = await QuotaTracker.add_to_quota(
+        _ = await QuotaTracker.add_to_quota(
             len(msg.content)
         )  # add to quota if voice is generated
 
@@ -206,22 +206,19 @@ class TextToSpeech(commands.Cog):
                         except ClientException as e:
                             if "Not connected to voice." in str(e):
                                 await msg.reply(
-                                    "Encountered internal error(Not connected to voice), attempting to reconnect for auto repair. Try disconnecting and reconnecting the bot manually if this persists."
-                                    + f"\n\nError log: ```\n{str(e)[:1700]}```"  # discord character limit is 2000, 1700 is a safe bet
+                                    "Encountered internal error that's not explicitly handled, please report this to the developer. Restarting the bot, please wait for a few seconds."
+                                    + f"Error log: {str(e)[:1700]}"  # discord character limit is 2000, 1700 is a safe bet
                                 )
-                                try:
-                                    await client.disconnect()
-                                    client = await user_voice_channel.connect()
-                                except Exception as e:
-                                    await msg.reply("Failed to reconnect, ")
+                                sys.exit(0)
                             elif "Already playing audio." in str(e):
                                 # no queue system yet, and probably not in the future, safe to ignore
                                 pass
                             else:
                                 await msg.reply(
-                                    "Encountered internal error that's not explicitly handled, please report this to the developer."
+                                    "Encountered internal error that's not explicitly handled, please report this to the developer. Restarting the bot, please wait for a few seconds."
                                     + f"Error log: {str(e)[:1700]}"  # discord character limit is 2000, 1700 is a safe bet
                                 )
+                                sys.exit(0)
                     break
 
 
