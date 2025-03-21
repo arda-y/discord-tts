@@ -19,8 +19,7 @@ cd discord-tts # assuming you cloned it into the current directory
 
 2- Install the requirements
 
-- docker
-- ffmpeg
+- docker (or podman)
 
 3- Create a Discord bot and get the token
 
