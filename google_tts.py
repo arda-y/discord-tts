@@ -1,14 +1,17 @@
 import os
 from google.cloud import texttospeech
 from audio_source import BytesAudioSource
+from config import RUNTIME_ENV
 
 
 class GoogleTTS:
 
     def __init__(self):
         # adds credentials to environment
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv("GOOGLE_API_KEY_FILE")
-
+        if RUNTIME_ENV == "container":
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = os.getenv("GOOGLE_API_KEY_FILE")
+        elif RUNTIME_ENV == "local":
+            os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./google-api-key.json"
         # creates a client from the credentials pulled from the environment
         self.ttsclient = texttospeech.TextToSpeechClient()
 

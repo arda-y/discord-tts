@@ -8,19 +8,22 @@ from voice_list import *
 from config import *
 import json
 
-with open(os.getenv("DISCORD_TOKEN_FILE"), "r") as f:
-    TOKEN = f.read()
+if RUNTIME_ENV == "container":
+    with open(os.getenv("DISCORD_TOKEN_FILE"), "r") as f:
+        TOKEN = f.read()
+elif RUNTIME_ENV == "local":
+    with open("./discord-token.txt", "r") as f:
+        TOKEN = f.read()
 
-
-if bot_owner_id == 5:
-    bot_owner_id = os.getenv(
+if BOT_OWNER_ID == 5:
+    BOT_OWNER_ID = os.getenv(
         "OWNER_ID", 343517933256835072
     )  # check env, or fallback to developer id
 
 bot = Bot(
-    command_prefix=bot_prefix,
+    command_prefix=BOT_PREFIX,
     intents=Intents.all(),
-    owner_id=bot_owner_id,
+    owner_id=BOT_OWNER_ID,
     help_command=None,
 )
 
@@ -127,18 +130,13 @@ async def help(ctx: Context):
 
 
 @bot.command()
-async def dry_run(ctx: Context, *, user: Member | User = None):
+async def dry_run(ctx: Context, *, passed_user: Member | User = None):
 
-    if user is None:
-        user = ctx.author
+    if passed_user is None:
+        passed_user = ctx.author
 
-    user = await User.get_or_generate(ctx.author.id)
+    user = await User.get_or_generate(passed_user.id)
     server = await Server.get_or_generate(ctx.guild.id)
-
-    try:
-        user_server_speed = json.loads(user.servers)[str(ctx.guild.id)]["speed"]
-    except KeyError:
-        user_server_speed = None
 
     try:
         user_server_voice = json.loads(user.servers)[str(ctx.guild.id)]["voice"]
@@ -146,9 +144,9 @@ async def dry_run(ctx: Context, *, user: Member | User = None):
         user_server_voice = None
 
     try:
-        user_default_speed = user.default_speed
+        server_default_voice = server.voice
     except KeyError:
-        user_default_speed = None
+        server_default_voice = None
 
     try:
         user_default_voice = user.default_voice
@@ -156,13 +154,22 @@ async def dry_run(ctx: Context, *, user: Member | User = None):
         user_default_voice = None
 
     try:
-        server_voice = server.voice
+        user_server_speed = json.loads(user.servers)[str(ctx.guild.id)]["speed"]
     except KeyError:
-        server_voice = None
+        user_server_speed = None
+
+    try:
+        user_default_speed = user.default_speed
+    except KeyError:
+        user_default_speed = None
+
+
+
+
 
     msg = (
         f"User Server Voice: `{user_server_voice}`\n"
-        + f"Server Voice: `{server_voice}`\n"
+        + f"Server Voice: `{server_default_voice}`\n"
         + f"User Default Voice: `{user_default_voice}`\n\n"
         + f"User Server Speed: `{user_server_speed}`\n"
         + f"User Default Speed: `{user_default_speed}`"

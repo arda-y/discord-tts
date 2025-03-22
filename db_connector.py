@@ -1,9 +1,13 @@
 from sqlalchemy import create_engine, inspect, Column, String, BigInteger, JSON
 from sqlalchemy.orm import declarative_base, Session
+from config import RUNTIME_ENV
 import json
 
 # i'll add option to switch to postgresql later
-_db_string = "sqlite:///mountpoint/discord-ttsbot.db"
+if RUNTIME_ENV == "container":
+    _db_string = "sqlite:///mountpoint/discord-ttsbot.db" # in container
+elif RUNTIME_ENV == "local":
+    _db_string = "sqlite:////app/discord-tts/discord-ttsbot.db" # in local
 
 if _db_string is None:
     raise ValueError("DATABASE_URL environment variable is not set")
@@ -23,6 +27,7 @@ conn = create_session()
 
 # Create an inspector to get table information
 inspector = inspect(_engine)
+
 
 # base object for all tables
 Base = declarative_base()
@@ -54,7 +59,9 @@ class QuotaTracker(Base):
         try:
             quota = conn.query(QuotaTracker).first()
             if quota is None:
-                return False
+                quota = QuotaTracker()
+                conn.add(quota)
+                conn.commit()
             quota.characters_used += characters_used
             conn.commit()
             return True
@@ -157,7 +164,7 @@ class User(Base):
     default_speed = Column(String, default="1.0")
     characters_used = Column(BigInteger, default=0)
 
-    servers = Column(JSON, default={})
+    servers = Column(JSON, default="{}")
     # per server voice and speed dictionary
     # server_id: (lang, voice, speed)
 

@@ -152,13 +152,14 @@ class TextToSpeech(commands.Cog):
             ]
             if server_specific_settings["speed"] == None:
                 raise KeyError
+            audio_gen_speed = server_specific_settings["speed"] if server_specific_settings["speed"] != "" else None
         except KeyError:
             pass
         except Exception as e:
             print(e)
 
         # 5- check user default speed
-        if len(audio_gen_speed) == 0:
+        if audio_gen_speed in ["", None]:
             audio_gen_speed = user_db_data.default_speed
 
         # debug point
